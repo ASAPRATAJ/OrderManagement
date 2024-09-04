@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
 
     "products",
+    "users",
     "rest_framework",
     "corsheaders",
 
@@ -83,7 +84,7 @@ WSGI_APPLICATION = "OrderManagementBackend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ordermanagement_db",
+        "NAME": "ordermanagemenet_testdb",
         "USER": "ordermanagement_user",
         "PASSWORD": "testpass123",
         "HOST": "localhost",
@@ -150,3 +151,6 @@ CORS_ALLOW_HEADERS = [
     "Authorization",
     "Content-Type",
 ]
+
+
+AUTH_USER_MODEL = 'users.CustomUser'

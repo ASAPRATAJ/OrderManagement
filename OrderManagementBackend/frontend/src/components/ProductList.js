@@ -21,7 +21,7 @@ const ProductList = () => {
       <ul>
         {products.map(product => (
           <li key={product.id}>
-            {product.name} - ${product.price}
+            {product.title} - ${product.price}
           </li>
         ))}
       </ul>
