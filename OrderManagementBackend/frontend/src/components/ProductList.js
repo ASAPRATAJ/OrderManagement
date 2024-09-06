@@ -1,25 +1,24 @@
-// src/components/ProductList.js
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const ProductList = () => {
+function ProductList() {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
-    axios.get('http://localhost:8000/api/products/')
-      .then(response => {
-        setProducts(response.data);
-      })
-      .catch(error => {
-        console.error('There was an error fetching the products!', error);
-      });
+    axios.get('http://127.0.0.1:8000/api/products/')
+    .then((response) => {
+      setProducts(response.data);
+    })
+    .catch((error) => {
+      console.error('There was an error fetching the products!', error);
+    });
   }, []);
 
   return (
     <div>
-      <h2>Product List</h2>
+      <h1>Product List</h1>
       <ul>
-        {products.map(product => (
+        {products.map((product) => (
           <li key={product.id}>
             {product.title} - ${product.price}
           </li>
@@ -27,6 +26,6 @@ const ProductList = () => {
       </ul>
     </div>
   );
-};
+}
 
 export default ProductList;

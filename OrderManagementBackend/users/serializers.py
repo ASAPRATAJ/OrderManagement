@@ -15,3 +15,10 @@ class CustomUserSerializer(serializers.ModelSerializer):
             company_name=validated_data.get('company_name', ''),
         )
         return user
+
+
+class ListCustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'company_name')
+
