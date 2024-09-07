@@ -10,6 +10,8 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError(_('The Email field must be set'))
         email = self.normalize_email(email)
+        if len(password) < 8:
+            raise ValueError(_('Password must contain at least 8 characters'))
         user = self.model(email=email, company_name=company_name, **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
