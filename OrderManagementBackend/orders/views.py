@@ -1,8 +1,13 @@
 from rest_framework import generics
-from .serializers import OrderSerializer
-from .models import Order
+from .serializers import OrderCreateSerializer, OrderListSerializer
+from .models import Order, OrderProduct
 
 
 class OrderCreateView(generics.CreateAPIView):
     queryset = Order.objects.all()
-    serializer_class = OrderSerializer
+    serializer_class = OrderCreateSerializer
+
+
+class OrderListView(generics.ListAPIView):
+    queryset = Order.objects.all()
+    serializer_class = OrderListSerializer
