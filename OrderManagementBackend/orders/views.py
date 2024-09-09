@@ -9,6 +9,11 @@ class OrderCreateView(generics.CreateAPIView):
     serializer_class = OrderCreateSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_serializer_context(self):
+        context = super().get_serializer_context()
+        context['request'] = self.request
+        return context
+
 
 class OrderListView(generics.ListAPIView):
     queryset = Order.objects.all()

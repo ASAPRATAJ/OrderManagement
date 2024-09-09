@@ -16,13 +16,15 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'user', 'products', 'created_at']
+        fields = ['id', 'products', 'created_at']
         read_only_fields = ['created_at']
 
     def create(self, validated_data):
         products_data = validated_data.pop('orderproduct_set')
-        order = Order.objects.create(**validated_data)
 
+        user = self.context['request'].user
+
+        order = Order.objects.create(user=user)
         for product_data in products_data:
             OrderProduct.objects.create(
                 order=order,
