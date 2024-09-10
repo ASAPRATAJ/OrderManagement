@@ -24,4 +24,4 @@ class CustomUserSerializer(serializers.ModelSerializer):
 class ListCustomUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = CustomUser
-        fields = ('id', 'company_name')
+        fields = ('id', 'company_name', 'is_staff', 'is_superuser')

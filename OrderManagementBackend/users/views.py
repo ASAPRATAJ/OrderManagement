@@ -1,5 +1,5 @@
 from rest_framework import generics
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated, IsAdminUser
 from .models import CustomUser
 from .serializers import CustomUserSerializer, ListCustomUserSerializer
 from orders.serializers import OrderListSerializer
@@ -14,6 +14,7 @@ class UserCreateView(generics.CreateAPIView):
 
 class UserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = ListCustomUserSerializer
 
 

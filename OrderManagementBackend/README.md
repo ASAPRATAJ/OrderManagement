@@ -51,7 +51,7 @@
 ### Create Product:
 - **Method:** POST
 - **URL:** http://127.0.0.1:8000/api/products/create/
-- **Permissions:** IsAuthenticated, #IsStaff - NOT ADDED YET
+- **Permissions:** IsAuthenticated, IsAdminUser (is_staff)
 - **Example payload:**
   ```json
   {
@@ -69,6 +69,6 @@
 ### List of created Users:
 - **Method:** GET
 - **URL:** http://127.0.0.1:8000/api/users/
-- **Permissions:** IsAuthenticated, #IsStaff - NOT ADDED YET
+- **Permissions:** IsAuthenticated, IsAdminUser (is_staff)
 
 
