@@ -1,6 +1,15 @@
 # READ.ME FILE
 
+
 ## ENDPOINTS:
+
+**Admin user:**
+- admin@example.com
+- testpass123
+
+**Normal user:**
+- user@example.com
+- testpass123
 
 ### Create User:
 - **Method:** POST
