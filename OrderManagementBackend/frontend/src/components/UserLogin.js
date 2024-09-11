@@ -1,29 +1,42 @@
 import React, { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 
 const UserLogin = () => {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [error, setError] = useState('');
+    const navigate = useNavigate();
 
-    const handleLogin = async (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setError('');
 
         try {
             const response = await axios.post('http://127.0.0.1:8000/api/users/token/create/', {
-                email: email,  // W Django JWT TokenAuth standardowo używa pola "username" dla logowania
-                password: password
+                email,
+                password
             });
 
-            // Przechwyć token i zapisz w localStorage
             const { access } = response.data;
+
+            // Zapisanie tokenu do localStorage
             localStorage.setItem('token', access);
 
-            alert('Logged in successfully!');
-            // Możesz przekierować użytkownika lub wywołać inny komponent po zalogowaniu
-        } catch (err) {
-            setError('Login failed. Check your credentials.');
+            // Dekodowanie tokenu, aby sprawdzić uprawnienia
+            const decodedToken = jwtDecode(access);
+            console.log('Decoded Token:', decodedToken);
+
+            // Zapisanie informacji o użytkowniku do localStorage
+            localStorage.setItem('user', JSON.stringify({
+                isStaff: decodedToken.is_staff,
+                isSuperUser: decodedToken.is_superuser,
+            }));
+            // Przekierowanie użytkownika na stronę główną
+            navigate('/');
+
+        } catch (error) {
+            setError('Invalid email or password');
         }
     };
 
@@ -31,11 +44,11 @@ const UserLogin = () => {
         <div>
             <h2>Login</h2>
             {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleLogin}>
+            <form onSubmit={handleSubmit}>
                 <div>
                     <label>Email:</label>
                     <input
-                        type="text"
+                        type="email"
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         required

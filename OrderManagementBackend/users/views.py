@@ -4,7 +4,12 @@ from .models import CustomUser
 from .serializers import CustomUserSerializer, ListCustomUserSerializer
 from orders.serializers import OrderListSerializer
 from orders.models import Order
+from rest_framework_simplejwt.views import TokenObtainPairView
+from .serializers import CustomTokenObtainPairSerializer
 
+
+class CustomTokenObtainPairView(TokenObtainPairView):
+    serializer_class = CustomTokenObtainPairSerializer
 
 
 class UserCreateView(generics.CreateAPIView):

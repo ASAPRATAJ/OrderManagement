@@ -8,11 +8,22 @@ function ProductCreate() {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    axios.post('http://127.0.0.1:8000/api/products/create/', {
-      title,
-      description,
-      price,
-    })
+
+    const token = localStorage.getItem('token'); // Pobieramy token z localStorage
+
+    axios.post(
+      'http://127.0.0.1:8000/api/products/create/',
+      {
+        title,
+        description,
+        price,
+      },
+      {
+        headers: {
+          Authorization: `Bearer ${token}`, // Dodajemy nagłówek z tokenem
+        },
+      }
+    )
     .then((response) => {
       console.log(response.data);
       alert('Product created successfully!');

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-const OrderList = () => {
+const UserOrderList = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -9,9 +9,9 @@ const OrderList = () => {
   useEffect(() => {
     const token = localStorage.getItem('token'); // Pobieramy token z localStorage
 
-    const fetchOrders = async () => {
+    const fetchUserOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/orders/', {
+        const response = await axios.get('http://localhost:8000/api/users/orders/', {
           headers: {
             Authorization: `Bearer ${token}`, // Dodajemy token w nagłówkach
           },
@@ -23,14 +23,14 @@ const OrderList = () => {
           setOrders(response.data);
         }
       } catch (error) {
-        console.error('Error fetching orders:', error);
-        setError('Error fetching orders.');
+        console.error('Error fetching user orders:', error);
+        setError('Error fetching user orders.');
       } finally {
         setLoading(false);
       }
     };
 
-    fetchOrders();
+    fetchUserOrders();
   }, []);
 
   if (loading) {
@@ -43,7 +43,7 @@ const OrderList = () => {
 
   return (
     <div>
-      <h2>Order List</h2>
+      <h2>Your Orders</h2>
       {orders.length === 0 ? (
         <p>No orders found.</p>
       ) : (
@@ -67,4 +67,4 @@ const OrderList = () => {
   );
 };
 
-export default OrderList;
+export default UserOrderList;
