@@ -1,8 +1,5 @@
 # READ.ME FILE
 
-
-## ENDPOINTS:
-
 **Admin user:**
 - admin@example.com
 - testpass123
@@ -11,7 +8,9 @@
 - user@example.com
 - testpass123
 
-### Create User:
+## ENDPOINTS:
+## users/...
+#### ***Create User:***
 - **Method:** POST
 - **URL:** http://127.0.0.1:8000/api/users/create/
 - **Example payload:**
@@ -22,7 +21,7 @@
     "password": "examplepassword123"
   }
 
-### Login User:
+#### ***Login User:***
 - **Method:** POST
 - **URL:** http://127.0.0.1:8000/api/users/token/create/
 - **Example payload:**
@@ -32,7 +31,18 @@
     "password": "examplepassword123"
   }
 
-### Create Order:
+#### ***List User's orders:***
+- **Method:** GET
+- **URL:** http://127.0.0.1:8000/api/users/orders/
+- **Permissions:** IsAuthenticated
+
+#### ***List all users:***
+- **Method:** GET
+- **URL:** http://127.0.0.1:8000/api/users/
+- **Permissions:** IsAuthenticated, IsAdminUser (is_staff)
+
+## orders/...
+#### Create Order:
 - **Method:** POST
 - **URL:** http://127.0.0.1:8000/api/orders/create/
 - **Permissions:** IsAuthenticated
@@ -50,12 +60,12 @@
         }
     ]
   }
-
-### List of User Orders:
+#### List all Orders:
 - **Method:** GET
-- **URL:** http://127.0.0.1:8000/api/users/orders/
-- **Permissions:** IsAuthenticated
+- **URL:** http://127.0.0.1:8000/api/orders/
+- **Permissions:** IsAuthenticated, IsAdminUser (is_staff)
 
+## products/...
 
 ### Create Product:
 - **Method:** POST
@@ -69,15 +79,23 @@
     "price": "30"
   }
 
-
 ### List of Products:
 - **Method:** GET
 - **URL:** http://127.0.0.1:8000/api/products/
 - **Permissions:** IsAuthenticated
 
-### List of created Users:
-- **Method:** GET
-- **URL:** http://127.0.0.1:8000/api/users/
+### Update/change Product:
+- **Method:** POST
+- **URL:** http://127.0.0.1:8000/api/products/<product-id>/update-image/
 - **Permissions:** IsAuthenticated, IsAdminUser (is_staff)
+- **Example payload:**
+  ```json
+  {
+    "title": "Example",
+    "description": "Example description",
+    "price": "30",
+    "image": "http://127.0.0.1:8000/media/products/images/PolishLodyLogo.jpg
+  }
+
 
 
