@@ -7,47 +7,27 @@ import UserList from './components/UserList';
 import OrderCreate from './components/OrderCreate';
 import OrderList from './components/OrderList';
 import UserLogin from './components/UserLogin';
+import Navbar from './components/Navbar'; // Importujemy Navbar
 
-function App() {
+const App = () => {
   return (
     <Router>
-      <nav>
-        <ul>
-          <li>
-            <Link to="/product-create">Create Product</Link>
-          </li>
-          <li>
-            <Link to="/product-list">Product List</Link>
-          </li>
-          <li>
-            <Link to="/user-create">Create User</Link>
-          </li>
-          <li>
-            <Link to="/user-list">User List</Link>
-          </li>
-          <li>
-            <Link to="/order-create">Order Create</Link>
-          </li>
-          <li>
-            <Link to="/order-list">Order List</Link>
-          </li>
-          <li>
-            <Link to="/user-login">User Login</Link>
-          </li>
-        </ul>
-      </nav>
-
-      <Routes>
-        <Route path="/product-create" element={<ProductCreate />} />
-        <Route path="/product-list" element={<ProductList />} />
-        <Route path="/user-create" element={<UserCreate />} />
-        <Route path="/user-list" element={<UserList />} />
-        <Route path="/order-create" element={<OrderCreate />} />
-        <Route path="/order-list" element={<OrderList />} />
-        <Route path="/user-login" element={<UserLogin />} />
-      </Routes>
+      {/* Dodajemy Navbar, aby był wyświetlany na wszystkich stronach */}
+      <Navbar />
+      <div style={{ paddingTop: '60px' }}> {/* Padding dla treści, żeby nie nachodziła na Navbar */}
+        <Routes>
+          <Route path="/" element={<h1>Welcome to MyApp</h1>} /> {/* Strona główna */}
+          <Route path="/login" element={<UserLogin />} />
+          <Route path="/products/create" element={<ProductCreate />} />
+          <Route path="/products" element={<ProductList />} />
+          <Route path="/users/create" element={<UserCreate />} />
+          <Route path="/users" element={<UserList />} />
+          <Route path="/orders/create" element={<OrderCreate />} />
+          <Route path="/orders" element={<OrderList />} />
+        </Routes>
+      </div>
     </Router>
   );
-}
+};
 
 export default App;

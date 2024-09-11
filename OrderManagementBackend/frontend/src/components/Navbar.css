@@ -1,0 +1,58 @@
+/* Navbar.css */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.navbar {
+    display: flex;
+    justify-content: space-between; /* Umożliwia rozmieszczenie logo na lewo, a linków na prawo */
+    align-items: center;
+    background-color: #333;
+    padding: 10px 20px;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    z-index: 1000;
+}
+
+.navbar-logo a {
+    color: #fff;
+    font-size: 24px;
+    text-decoration: none;
+}
+
+.navbar-links {
+    list-style: none;
+    display: flex;
+    justify-content: center; /* Ustawia linki na środku dostępnego miejsca */
+    margin: 0;
+    padding: 0;
+    flex: 1; /* Pozwala, żeby linki zajmowały całą dostępną szerokość */
+}
+
+.navbar-links li {
+    margin: 0 15px; /* Dystans między linkami */
+}
+
+.navbar-links a {
+    color: #fff;
+    text-decoration: none;
+    font-size: 18px;
+}
+
+.navbar-links a:hover {
+    text-decoration: underline;
+}
+
+@media (max-width: 768px) {
+    /* Styl dla mniejszych ekranów */
+    .navbar-links {
+        flex-direction: column; /* W wersji mobilnej linki ustawią się jeden pod drugim */
+        align-items: center;
+    }
+
+    .navbar-links li {
+        margin: 10px 0; /* Odstępy między linkami w wersji mobilnej */
+    }
+}
