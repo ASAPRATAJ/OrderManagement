@@ -44,7 +44,19 @@ function ProductList() {
         <ul>
           {products.map((product) => (
             <li key={product.id}>
-              {product.title} - {product.description} - {product.price}zł
+              <div>
+                {/* Wyświetlanie obrazu bez dodatkowej logiki */}
+                <img
+                  src={product.image} // Backend zawsze dostarcza obraz, czy to domyślny, czy własny
+                  alt={product.title}
+                  style={{ width: '100px', height: '100px', objectFit: 'cover' }} // Styl obrazu
+                />
+              </div>
+              <div>
+                <h3>{product.title}</h3>
+                <p>{product.description}</p>
+                <p>{product.price} zł</p>
+              </div>
             </li>
           ))}
         </ul>

@@ -27,6 +27,7 @@ const Navbar = () => {
                 {isLoggedIn && (
                     <>
                         <li><Link to="/orders/create">Create Order</Link></li>
+                        <li><Link to="/products">Products</Link></li>
                         <li><Link to="/users/orders">Your Orders</Link></li> {/* Dodano link do zamówień użytkownika */}
 
                         {isStaff && (
