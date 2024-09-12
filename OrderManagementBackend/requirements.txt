@@ -8,3 +8,4 @@ psycopg2-pool==1.2
 django-cors-headers==4.4.0
 djangorestframework-simplejwt==5.3.1
 dj_database_url==2.2.0
+gunicorn
