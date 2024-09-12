@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
+import './UserLogin.css'; // Upewnij się, że dodajesz odpowiedni plik CSS
 
 const UserLogin = () => {
     const [email, setEmail] = useState('');
@@ -41,11 +42,10 @@ const UserLogin = () => {
     };
 
     return (
-        <div>
-            <h2>Login</h2>
-            {error && <p style={{ color: 'red' }}>{error}</p>}
-            <form onSubmit={handleSubmit}>
-                <div>
+        <div className="login-container">
+            {error && <p className="error-message">{error}</p>}
+            <form onSubmit={handleSubmit} className="login-form">
+                <div className="form-group">
                     <label>Email:</label>
                     <input
                         type="email"
@@ -54,7 +54,7 @@ const UserLogin = () => {
                         required
                     />
                 </div>
-                <div>
+                <div className="form-group">
                     <label>Password:</label>
                     <input
                         type="password"
@@ -63,7 +63,7 @@ const UserLogin = () => {
                         required
                     />
                 </div>
-                <button type="submit">Login</button>
+                <button type="submit" className="login-button">Login</button>
             </form>
         </div>
     );

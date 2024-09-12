@@ -9,7 +9,6 @@ const OrderCreate = () => {
   const [message, setMessage] = useState('');
   const navigate = useNavigate();
 
-  // Sprawdzamy, czy użytkownik jest zalogowany
   const token = localStorage.getItem('token');
   let decodedToken = null;
   let userId = null;
@@ -23,24 +22,21 @@ const OrderCreate = () => {
     }
   }
 
-  // Jeśli token nie istnieje lub jest nieprawidłowy, przekierowujemy na stronę logowania
   useEffect(() => {
     if (!token) {
-      navigate('/login'); // Przekierowanie do strony logowania
+      navigate('/login');
     }
   }, [token, navigate]);
 
-  // Fetch products from the API
   useEffect(() => {
     const fetchProducts = async () => {
       try {
         const response = await axios.get('http://127.0.0.1:8000/api/products/', {
           headers: {
-            Authorization: `Bearer ${token}`, // Dodajemy token w nagłówku
+            Authorization: `Bearer ${token}`,
           },
         });
         setProducts(response.data);
-        // Initialize orderProducts with empty quantities
         setOrderProducts(response.data.map(product => ({ product_id: product.id, quantity: 0 })));
       } catch (error) {
         console.error('Error fetching products:', error);
@@ -63,13 +59,13 @@ const OrderCreate = () => {
 
     const data = {
       user: userId,
-      products: orderProducts.filter(product => product.quantity > 0), // Wyślemy tylko te produkty, które mają ilość większą niż 0
+      products: orderProducts.filter(product => product.quantity > 0),
     };
 
     try {
       const response = await axios.post('http://127.0.0.1:8000/api/orders/create/', data, {
         headers: {
-          Authorization: `Bearer ${token}`, // Token w nagłówku
+          Authorization: `Bearer ${token}`,
         },
       });
       setMessage('Order created successfully!');
@@ -80,33 +76,42 @@ const OrderCreate = () => {
     }
   };
 
-  // Jeśli użytkownik nie jest zalogowany, nie wyświetlamy formularza
   if (!token) {
     return <p>You must be logged in to create an order.</p>;
   }
 
   return (
-    <div>
-      <h2>Create Order</h2>
-      {message && <p>{message}</p>}
-      <form onSubmit={handleSubmit}>
-        <h3>Products</h3>
+    <div className="max-w-4xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <h2 className="text-2xl font-bold mb-6 text-center">Create Order</h2>
+      {message && (
+        <p className={`mb-4 text-center ${message.includes('successfully') ? 'text-green-500' : 'text-red-500'}`}>
+          {message}
+        </p>
+      )}
+      <form onSubmit={handleSubmit} className="space-y-6">
+        <h3 className="text-xl font-semibold">Products</h3>
         {products.length === 0 ? (
-          <p>Loading products...</p>
+          <p className="text-center">Loading products...</p>
         ) : (
           products.map((product, index) => (
-            <div key={product.id}>
-              <label>{product.title}</label> {/* Wyświetlamy nazwę produktu */}
+            <div key={product.id} className="flex items-center space-x-4">
+              <label className="w-1/2">{product.title}</label>
               <input
                 type="number"
                 value={orderProducts[index]?.quantity || 0}
                 onChange={(e) => handleQuantityChange(index, e.target.value)}
                 min="0"
+                className="w-1/4 p-2 border border-gray-300 rounded-md"
               />
             </div>
           ))
         )}
-        <button type="submit">Create Order</button>
+        <button
+          type="submit"
+          className="w-full py-2 px-4 bg-blue-500 text-white font-semibold rounded-md hover:bg-blue-600 transition duration-300"
+        >
+          Create Order
+        </button>
       </form>
     </div>
   );

@@ -1,0 +1,85 @@
+/* UserLogin.css */
+.login-container {
+    display: flex;
+    justify-content: center; /* Wyśrodkowanie w poziomie */
+    align-items: center; /* Wyśrodkowanie w pionie */
+    height: 100vh; /* Cała wysokość widoku */
+    padding-top: 60px; /* Przestrzeń na navbar */
+    box-sizing: border-box;
+    background-color: #f5f5f5; /* Tło strony */
+}
+
+.login-form {
+    background-color: #ffffff; /* Tło formularza */
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    width: 100%;
+    max-width: 400px; /* Maksymalna szerokość formularza */
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.form-group label {
+    display: block;
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+.login-button {
+    width: 100%;
+    padding: 10px;
+    background-color: #007bff; /* Kolor przycisku */
+    border: none;
+    color: #fff;
+    border-radius: 4px;
+    font-size: 16px;
+    cursor: pointer;
+}
+
+.login-button:hover {
+    background-color: #0056b3; /* Ciemniejszy kolor przycisku po najechaniu */
+}
+
+.error-message {
+    color: red;
+    margin-bottom: 15px;
+    font-size: 14px;
+}
+
+/* Media Queries */
+@media (max-width: 768px) {
+    .login-form {
+        padding: 15px; /* Mniejsze odstępy wewnętrzne na mniejszych ekranach */
+        max-width: 90%; /* Formularz szeroki na 90% szerokości ekranu */
+    }
+
+    .login-button {
+        font-size: 14px; /* Mniejsza czcionka na przycisku */
+        padding: 8px; /* Mniejsze wypełnienie na mniejszych ekranach */
+    }
+}
+
+@media (max-width: 480px) {
+    .login-form {
+        padding: 10px; /* Mniejsze odstępy wewnętrzne na jeszcze mniejszych ekranach */
+    }
+
+    .form-group input {
+        padding: 10px; /* Większe pole wejściowe dla lepszej użyteczności */
+    }
+
+    .login-button {
+        font-size: 12px; /* Mniejsza czcionka na przycisku */
+        padding: 10px; /* Większe wypełnienie na mniejszych ekranach */
+    }
+}
