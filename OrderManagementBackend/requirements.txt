@@ -9,3 +9,9 @@ django-cors-headers==4.4.0
 djangorestframework-simplejwt==5.3.1
 dj_database_url==2.2.0
 gunicorn
+axios==0.4.0
+react==4.3.0
+react-dom
+react-router-dom
+tailwind== 3.1.5b0
+
