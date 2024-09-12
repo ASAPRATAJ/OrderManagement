@@ -86,11 +86,11 @@ WSGI_APPLICATION = "OrderManagementBackend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ordermanagemenet_testdb",
-        "USER": "ordermanagement_user",
-        "PASSWORD": "testpass123",
-        "HOST": "localhost",
-        "PORT": "5432",
+        "NAME": "railway",
+        "USER": "postgres",
+        "PASSWORD": "MfaMiSsbLOLDSMXKYdCCUEYMEdeimsPv",
+        "HOST": "autorack.proxy.rlwy.net",
+        "PORT": "36180",
     }
 }
 
