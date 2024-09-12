@@ -1,2 +1,2 @@
-web: cd OrderManagementBackend && gunicorn OrderManagementBackend.wsgi --log-file -
+web: gunicorn OrderManagementBackend.wsgi --log-file -
 static: cd frontend && npm start
