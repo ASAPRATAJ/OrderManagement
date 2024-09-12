@@ -1,0 +1,2 @@
+web: gunicorn ordermanagementbackend.wsgi --log-file -
+
