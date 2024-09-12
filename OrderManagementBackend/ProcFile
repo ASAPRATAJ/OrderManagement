@@ -1,2 +1,3 @@
-web: gunicorn ordermanagementbackend.wsgi --log-file -
+gunicorn ordermanagementbackend.wsgi --log-file -
+cd frontend && npm start
 
