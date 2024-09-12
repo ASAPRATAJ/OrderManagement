@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 from datetime import timedelta
+import dj_database_url
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -26,7 +27,7 @@ SECRET_KEY = "django-insecure-8w0m!!2zzdnq2d+h*2$5!$2r@6=mm_a95p5ogt_(oe5tzqp2bw
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [*]
 
 
 # Application definition
@@ -83,15 +84,18 @@ WSGI_APPLICATION = "OrderManagementBackend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.postgresql",
+#         "NAME": "railway",
+#         "USER": "postgres",
+#         "PASSWORD": "MfaMiSsbLOLDSMXKYdCCUEYMEdeimsPv",
+#         "HOST": "autorack.proxy.rlwy.net",
+#         "PORT": "36180",
+#     }
+# }
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": "railway",
-        "USER": "postgres",
-        "PASSWORD": "MfaMiSsbLOLDSMXKYdCCUEYMEdeimsPv",
-        "HOST": "autorack.proxy.rlwy.net",
-        "PORT": "36180",
-    }
+    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
 }
 
 
