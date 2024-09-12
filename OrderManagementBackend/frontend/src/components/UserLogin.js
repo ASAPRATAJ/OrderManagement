@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { jwtDecode } from 'jwt-decode';
-import './UserLogin.css'; // Upewnij się, że dodajesz odpowiedni plik CSS
 
 const UserLogin = () => {
     const [email, setEmail] = useState('');
@@ -33,8 +32,12 @@ const UserLogin = () => {
                 isStaff: decodedToken.is_staff,
                 isSuperUser: decodedToken.is_superuser,
             }));
-            // Przekierowanie użytkownika na stronę główną
-            navigate('/');
+
+            // Przekierowanie na stronę główną po zalogowaniu
+            navigate('/');  // Przenosi użytkownika na stronę główną
+
+            // Odświeżenie strony po zalogowaniu
+            window.location.reload();  // Odświeża stronę
 
         } catch (error) {
             setError('Invalid email or password');
@@ -42,29 +45,45 @@ const UserLogin = () => {
     };
 
     return (
-        <div className="login-container">
-            {error && <p className="error-message">{error}</p>}
-            <form onSubmit={handleSubmit} className="login-form">
-                <div className="form-group">
-                    <label>Email:</label>
-                    <input
-                        type="email"
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        required
-                    />
-                </div>
-                <div className="form-group">
-                    <label>Password:</label>
-                    <input
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        required
-                    />
-                </div>
-                <button type="submit" className="login-button">Login</button>
-            </form>
+        <div className="flex items-center justify-center min-h-screen bg-gray-100">
+            <div className="w-full max-w-md p-6 bg-white shadow-lg rounded-lg">
+                <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Login</h2>
+
+                {error && <p className="text-red-600 text-center mb-4">{error}</p>}
+
+                <form onSubmit={handleSubmit} className="space-y-6">
+                    <div>
+                        <label className="block text-gray-700 font-semibold">Email:</label>
+                        <input
+                            type="email"
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            required
+                            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div>
+                        <label className="block text-gray-700 font-semibold">Password:</label>
+                        <input
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            required
+                            className="w-full px-4 py-2 mt-1 text-gray-700 bg-gray-100 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                        />
+                    </div>
+
+                    <div className="flex justify-center">
+                        <button
+                            type="submit"
+                            className="w-full px-4 py-2 text-white bg-gray-800 rounded-md hover:bg-gray-700 focus:outline-none focus:ring-4 focus:ring-gray-500 transition duration-300"
+                        >
+                            Login
+                        </button>
+                    </div>
+                </form>
+            </div>
         </div>
     );
 };

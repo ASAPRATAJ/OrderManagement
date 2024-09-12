@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode'; // Poprawiona importacja
 
 const OrderCreate = () => {
   const [products, setProducts] = useState([]);
@@ -95,7 +95,15 @@ const OrderCreate = () => {
         ) : (
           products.map((product, index) => (
             <div key={product.id} className="flex items-center space-x-4">
+              {/* Obrazek produktu */}
+              <img
+                src={product.image} // Zakładamy, że API zwraca URL w polu "image"
+                alt={product.title}
+                className="w-16 h-16 object-cover rounded" // Styl obrazka
+              />
+              {/* Nazwa produktu */}
               <label className="w-1/2">{product.title}</label>
+              {/* Ilość produktu */}
               <input
                 type="number"
                 value={orderProducts[index]?.quantity || 0}

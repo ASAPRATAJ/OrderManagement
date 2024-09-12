@@ -28,38 +28,44 @@ function ProductList() {
   }, []);
 
   if (loading) {
-    return <div>Loading...</div>; // Komunikat podczas ładowania
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-lg font-semibold">Loading products...</p>
+      </div>
+    ); // Komunikat podczas ładowania
   }
 
   if (error) {
-    return <div>{error}</div>; // Komunikat błędu
+    return (
+      <div className="flex justify-center items-center h-screen">
+        <p className="text-red-500">{error}</p> {/* Komunikat błędu */}
+      </div>
+    );
   }
 
   return (
-    <div>
-      <h1>Product List</h1>
+    <div className="max-w-7xl mx-auto p-6 bg-white shadow-md rounded-lg mt-10">
+      <h1 className="text-3xl font-bold mb-6 text-center">Product List</h1>
       {products.length === 0 ? (
-        <p>No products available.</p>
+        <p className="text-center">No products available.</p>
       ) : (
-        <ul>
+        <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => (
-            <li key={product.id}>
-              <div>
-                {/* Wyświetlanie obrazu bez dodatkowej logiki */}
-                <img
-                  src={product.image} // Backend zawsze dostarcza obraz, czy to domyślny, czy własny
-                  alt={product.title}
-                  style={{ width: '100px', height: '100px', objectFit: 'cover' }} // Styl obrazu
-                />
-              </div>
-              <div>
-                <h3>{product.title}</h3>
-                <p>{product.description}</p>
-                <p>{product.price} zł</p>
-              </div>
-            </li>
+            <div
+              key={product.id}
+              className="border border-gray-300 rounded-lg p-4 hover:shadow-lg transition duration-300"
+            >
+              <img
+                src={product.image} // Backend zawsze dostarcza obraz, czy to domyślny, czy własny
+                alt={product.title}
+                className="w-full h-48 object-cover rounded-md mb-4"
+              />
+              <h3 className="text-xl font-semibold mb-2">{product.title}</h3>
+              <p className="text-gray-600 mb-2">{product.description}</p>
+              <p className="text-lg font-bold">{product.price} zł</p>
+            </div>
           ))}
-        </ul>
+        </div>
       )}
     </div>
   );
