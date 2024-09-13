@@ -29,7 +29,7 @@ function ProductCreate() {
     }
 
     axios.post(
-      'http://127.0.0.1:8000/api/products/create/',
+      'ordermanagement-production-161a.up.railway.app/8080/api/products/create/',
       formData,
       {
         headers: {

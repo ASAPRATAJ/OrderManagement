@@ -84,19 +84,20 @@ WSGI_APPLICATION = "OrderManagementBackend.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.postgresql",
-#         "NAME": "railway",
-#         "USER": "postgres",
-#         "PASSWORD": "MfaMiSsbLOLDSMXKYdCCUEYMEdeimsPv",
-#         "HOST": "autorack.proxy.rlwy.net",
-#         "PORT": "36180",
-#     }
-# }
+
 DATABASES = {
-    'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+    "default": {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": "railway",
+        "USER": "postgres",
+        "PASSWORD": "MfaMiSsbLOLDSMXKYdCCUEYMEdeimsPv",
+        "HOST": "autorack.proxy.rlwy.net",
+        "PORT": "36180",
+    }
 }
+# DATABASES = {
+#     'default': dj_database_url.config(default=os.getenv('DATABASE_URL'))
+# }
 
 
 # Password validation
@@ -186,3 +187,5 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
+CSRF_TRUSTED_ORIGINS = ['https://ordermanagement.up.railway.app']
