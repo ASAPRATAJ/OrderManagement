@@ -16,7 +16,7 @@ const UserCreate = () => {
     setError('');
 
     axios
-      .post('http://127.0.0.1:8000/api/users/create/', {
+      .post('https://ordermanagement.up.railway.app/api/users/create/', {
         email,
         company_name: companyName,
         password,

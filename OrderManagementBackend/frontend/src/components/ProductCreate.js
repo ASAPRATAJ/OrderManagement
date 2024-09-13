@@ -29,7 +29,7 @@ function ProductCreate() {
     }
 
     axios.post(
-      'ordermanagement-production-161a.up.railway.app/8080/api/products/create/',
+      'https://ordermanagement.up.railway.app/api/products/create/',
       formData,
       {
         headers: {

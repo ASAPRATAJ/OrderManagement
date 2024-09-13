@@ -31,7 +31,7 @@ const OrderCreate = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get('http://127.0.0.1:8000/api/products/', {
+        const response = await axios.get('https://ordermanagement.up.railway.app/api/products/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -63,7 +63,7 @@ const OrderCreate = () => {
     };
 
     try {
-      const response = await axios.post('http://127.0.0.1:8000/api/orders/create/', data, {
+      const response = await axios.post('https://ordermanagement.up.railway.app/api/orders/create/', data, {
         headers: {
           Authorization: `Bearer ${token}`,
         },

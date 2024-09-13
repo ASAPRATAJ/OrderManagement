@@ -12,7 +12,7 @@ const UserOrderList = () => {
 
     const fetchUserOrders = async () => {
       try {
-        const response = await axios.get('http://localhost:8000/api/users/orders/', {
+        const response = await axios.get('https://ordermanagement.up.railway.app/api/users/orders/', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
