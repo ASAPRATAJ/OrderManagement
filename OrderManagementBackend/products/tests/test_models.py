@@ -13,7 +13,7 @@ class ProductTestCase(TestCase):
         self.model = Product.objects.create(
             title='Example',
             description='Example description',
-            price=40,
+            price=40
         )
 
     def test_model_is_saved_in_db(self):
