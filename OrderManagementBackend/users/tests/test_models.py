@@ -1,22 +1,6 @@
 from django.test import TestCase
 from users.models import CustomUser
-from users.models import CustomUserManager
 
-
-#Test cases:
-# Sprawdzic czy model poprawnie zapisuje sie w bazie (OK)
-# Sprawdzic czy model poprawnie jest tworzony (OK)
-# sprawdzic czy superuser jest poprawnie tworzony - sprawdzic czy posiada is_staff = True oraz is_superuser = True (OK)
-# sprawdzic czy pole defaultowe automatycznie sie dodaja (OK)
-# sprawdzic czy haslo jest zhashowane (OK)
-# sprawdzic czy nie da sie stworzyc dwoch takich samych uzytkownikow
-# sprawdzic czy tworzenie uzytkownika za pomoca emaila jest poprawne
-# sprawdzic czy jest normalizacja email lub czy dziala poprawnie
-# sprawdzic czy hasło zawiera male litery
-# sprawdzic czy haslo zawiera duze litery
-# sprawdzic czy haslo zawiera minimum 8 znakow
-# sprawdzic czy haslo zawiera przynajmniej jeden znak specjalny
-#
 
 class CustomUserTestCase(TestCase):
     def setUp(self):
@@ -81,7 +65,6 @@ class CustomUserTestCase(TestCase):
                 password='Testpass123!',
             )
         self.assertEqual(str(context.exception), 'The Email field must be set')
-
 
     def test_superuser_must_have_is_superuser_true(self):
         with self.assertRaises(ValueError):
