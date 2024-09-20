@@ -19,6 +19,15 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         fields = ['id', 'products', 'created_at']
         read_only_fields = ['created_at']
 
+    def validate(self, data):
+        products_data = data.get('orderproduct_set', [])
+
+        # Walidacja, czy lista produktów nie jest pusta
+        if not products_data:
+            raise serializers.ValidationError("To create order, the list cannot be empty.")
+
+        return data
+
     def create(self, validated_data):
         products_data = validated_data.pop('orderproduct_set')
 

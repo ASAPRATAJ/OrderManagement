@@ -6,6 +6,7 @@ from orders.models import Order, OrderProduct
 from products.models import Product
 from users.models import CustomUser
 
+
 class OrderViewsTestCase(APITestCase):
 
     def setUp(self):
@@ -61,3 +62,15 @@ class OrderViewsTestCase(APITestCase):
 
         response = self.client.post(url, data, format='json')
         self.assertEqual(response.status_code, status.HTTP_401_UNAUTHORIZED)
+
+    def test_create_order_with_empty_product_list(self):
+        """Test próby utworzenia zamówienia z pustą listą produktów"""
+        self.authenticate_user()
+        url = reverse('order-create')
+        data = {
+            "products": []  # Pusta lista produktów
+        }
+
+        response = self.client.post(url, data, format='json')
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertEqual(response.data['non_field_errors'][0], "To create order, the list cannot be empty.")
