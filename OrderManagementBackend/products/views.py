@@ -1,7 +1,7 @@
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
-from .models import Product
-from .serializers import ProductSerializer
+from .models import Product, ProductTag
+from .serializers import ProductSerializer, ProductTagSerializer
 
 
 class ProductCreateView(generics.CreateAPIView):
@@ -15,6 +15,16 @@ class ProductListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
+    def get_queryset(self):
+        """
+        Opcjonalnie filtrujemy produkty po tagu, jeśli 'tag' jest obecny w parametrze zapytania
+        """
+        queryset = Product.objects.all()
+        tag = self.request.query_params.get('tag', None)
+        if tag:
+            queryset = queryset.filter(tags__name=tag)  # Filtrujemy produkty po tagu
+        return queryset
+
 
 class ProductImageUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Product.objects.all()
@@ -25,4 +35,16 @@ class ProductImageUpdateView(generics.RetrieveUpdateAPIView):
 class ProductDestroyView(generics.DestroyAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class ProductTagCreateView(generics.CreateAPIView):
+    queryset = ProductTag.objects.all()
+    serializer_class = ProductTagSerializer
+    permission_classes = [IsAuthenticated, IsAdminUser]
+
+
+class ProductTagListView(generics.ListAPIView):
+    queryset = ProductTag.objects.all()
+    serializer_class = ProductTagSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
