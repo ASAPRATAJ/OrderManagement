@@ -20,3 +20,6 @@ class OrderListView(generics.ListAPIView):
     serializer_class = OrderListSerializer
     permission_classes = [IsAuthenticated]
 
+    def get_queryset(self):
+        return Order.objects.all().order_by('-created_at')
+
