@@ -26,7 +26,16 @@ class ProductListView(generics.ListAPIView):
         return queryset
 
 
-class ProductImageUpdateView(generics.RetrieveUpdateAPIView):
+class ProductDetailView(generics.RetrieveAPIView):
+    """
+    Widok do wyświetlania szczegółów konkretnego produktu.
+    """
+    queryset = Product.objects.all()
+    permission_classes = [IsAuthenticated]
+    serializer_class = ProductSerializer
+
+
+class ProductUpdateView(generics.RetrieveUpdateAPIView):
     queryset = Product.objects.all()
     serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
@@ -47,4 +56,4 @@ class ProductTagCreateView(generics.CreateAPIView):
 class ProductTagListView(generics.ListAPIView):
     queryset = ProductTag.objects.all()
     serializer_class = ProductTagSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
+    permission_classes = [IsAuthenticated]
