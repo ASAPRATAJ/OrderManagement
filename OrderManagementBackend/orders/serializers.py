@@ -13,10 +13,11 @@ class OrderProductSerializer(serializers.ModelSerializer):
 
 class OrderCreateSerializer(serializers.ModelSerializer):
     products = OrderProductSerializer(source='orderproduct_set', many=True)
+    delivery_date = serializers.DateField(required=True)  # Dodajemy pole delivery_date
 
     class Meta:
         model = Order
-        fields = ['id', 'products', 'created_at']
+        fields = ['id', 'products', 'created_at', 'delivery_date']  # Upewnij się, że delivery_date jest tutaj
         read_only_fields = ['created_at']
 
     def validate(self, data):
@@ -30,15 +31,18 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     def create(self, validated_data):
         products_data = validated_data.pop('orderproduct_set')
+        delivery_date = validated_data.pop('delivery_date')  # Pobieramy delivery_date
 
         user = self.context['request'].user
 
-        order = Order.objects.create(user=user)
+        # Tworzymy zamówienie z delivery_date
+        order = Order.objects.create(user=user, delivery_date=delivery_date)
+
         for product_data in products_data:
             OrderProduct.objects.create(
                 order=order,
                 product=product_data['product'],
-                quantity=product_data['quantity']
+                quantity=product_data['quantity'],
             )
 
         return order
@@ -58,4 +62,4 @@ class OrderListSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'created_at', 'user', 'products']
+        fields = ['id', 'created_at', 'user', 'delivery_date', 'products']

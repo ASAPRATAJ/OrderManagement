@@ -7,6 +7,7 @@ class Order(models.Model):
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
     created_at = models.DateTimeField(auto_now_add=True)
+    delivery_date = models.DateField(null=True, blank=True)
 
     def __str__(self):
         return f"Order ID{self.id}, created by {self.user}"
