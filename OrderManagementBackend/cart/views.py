@@ -1,8 +1,11 @@
+from time import timezone
+
 from django.shortcuts import get_object_or_404
 from rest_framework import generics, status
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from orders.models import Order, OrderProduct
 from products.models import Product
 from .serializers import CartSerializer, CartItemsSerializer
 from .models import Cart, CartItems
@@ -30,15 +33,22 @@ class CartItemListCreateView(generics.ListCreateAPIView):
 
     def perform_create(self, serializer):
         cart, _ = Cart.objects.get_or_create(user=self.request.user)
-        product_id = self.request.data.get('product_id')
-        quantity = self.request.data.get('quantity', 1)
+        product_id = serializer.validated_data.get('product_id')  # Użyj product_id z serializer
+        quantity = serializer.validated_data.get('quantity', 1)
 
+        # Sprawdź, czy produkt istnieje
         product = get_object_or_404(Product, id=product_id)
+
+        # Sprawdź, czy już istnieje wpis dla tego produktu w koszyku
         cart_item, created = CartItems.objects.get_or_create(cart=cart, product=product)
+
         if not created:
+            # Jeśli już istnieje, zaktualizuj ilość
             cart_item.quantity += int(quantity)
         else:
+            # Jeśli to nowy wpis, ustaw ilość
             cart_item.quantity = quantity
+
         cart_item.save()
 
 
@@ -77,3 +87,31 @@ class CartItemDeleteView(generics.DestroyAPIView):
         # Usuń tylko pozycje z koszyka zalogowanego użytkownika
         cart, _ = Cart.objects.get_or_create(user=self.request.user)
         return CartItems.objects.filter(cart=cart)
+
+
+class CreateOrderFromCartView(generics.GenericAPIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, *args, **kwargs):
+        # Pobierz koszyk użytkownika
+        cart, _ = Cart.objects.get_or_create(user=request.user)
+        cart_items = CartItems.objects.filter(cart=cart)
+
+        if not cart_items.exists():
+            return Response({'error': 'Koszyk jest pusty'}, status=status.HTTP_400_BAD_REQUEST)
+
+        # Stwórz zamówienie
+        order = Order.objects.create(user=request.user)
+
+        # Dodaj produkty z koszyka do zamówienia
+        for item in cart_items:
+            OrderProduct.objects.create(
+                order=order,
+                product=item.product,
+                quantity=item.quantity
+            )
+
+        # Wyczyść koszyk
+        cart_items.delete()
+
+        return Response({'message': 'Zamówienie zostało utworzone', 'order_id': order.id}, status=status.HTTP_201_CREATED)

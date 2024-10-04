@@ -1,9 +1,8 @@
 from django.db import models
 
-tags = ['Podstawowa', 'Rozszerzona', 'Premium', 'Smaki tygodnia']
-
 
 class Product(models.Model):
+    """Fields of Product Model in database"""
     title = models.CharField(max_length=120, blank=False)
     description = models.TextField()
     price = models.IntegerField()
@@ -17,6 +16,7 @@ class Product(models.Model):
 
 
 class ProductTag(models.Model):
+    """Fields of ProductTag Model in database"""
     name = models.CharField(max_length=100, unique=True)
 
     def __str__(self):
