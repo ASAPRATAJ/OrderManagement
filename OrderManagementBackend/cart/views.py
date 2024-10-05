@@ -7,7 +7,7 @@ from rest_framework.response import Response
 
 from orders.models import Order, OrderProduct
 from products.models import Product
-from .serializers import CartSerializer, CartItemsSerializer
+from .serializers import CartSerializer, CartItemsSerializer, CreateOrderFromCartSerializer
 from .models import Cart, CartItems
 
 
@@ -91,27 +91,13 @@ class CartItemDeleteView(generics.DestroyAPIView):
 
 class CreateOrderFromCartView(generics.GenericAPIView):
     permission_classes = [IsAuthenticated]
+    serializer_class = CreateOrderFromCartSerializer
 
     def post(self, request, *args, **kwargs):
-        # Pobierz koszyk użytkownika
-        cart, _ = Cart.objects.get_or_create(user=request.user)
-        cart_items = CartItems.objects.filter(cart=cart)
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            # Utwórz zamówienie
+            order = serializer.save()
 
-        if not cart_items.exists():
-            return Response({'error': 'Koszyk jest pusty'}, status=status.HTTP_400_BAD_REQUEST)
-
-        # Stwórz zamówienie
-        order = Order.objects.create(user=request.user)
-
-        # Dodaj produkty z koszyka do zamówienia
-        for item in cart_items:
-            OrderProduct.objects.create(
-                order=order,
-                product=item.product,
-                quantity=item.quantity
-            )
-
-        # Wyczyść koszyk
-        cart_items.delete()
-
-        return Response({'message': 'Zamówienie zostało utworzone', 'order_id': order.id}, status=status.HTTP_201_CREATED)
+            return Response({'message': 'Zamówienie zostało utworzone', 'order_id': order.id}, status=status.HTTP_201_CREATED)
+        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)

@@ -1,3 +1,4 @@
+import datetime
 from rest_framework import serializers
 from .models import Order, OrderProduct
 from products.models import Product
@@ -19,33 +20,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         model = Order
         fields = ['id', 'products', 'created_at', 'delivery_date']  # Upewnij się, że delivery_date jest tutaj
         read_only_fields = ['created_at']
-
-    def validate(self, data):
-        products_data = data.get('orderproduct_set', [])
-
-        # Walidacja, czy lista produktów nie jest pusta
-        if not products_data:
-            raise serializers.ValidationError("To create order, the list cannot be empty.")
-
-        return data
-
-    def create(self, validated_data):
-        products_data = validated_data.pop('orderproduct_set')
-        delivery_date = validated_data.pop('delivery_date')  # Pobieramy delivery_date
-
-        user = self.context['request'].user
-
-        # Tworzymy zamówienie z delivery_date
-        order = Order.objects.create(user=user, delivery_date=delivery_date)
-
-        for product_data in products_data:
-            OrderProduct.objects.create(
-                order=order,
-                product=product_data['product'],
-                quantity=product_data['quantity'],
-            )
-
-        return order
 
 
 class OrderProductListSerializer(serializers.ModelSerializer):

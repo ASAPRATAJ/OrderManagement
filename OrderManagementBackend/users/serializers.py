@@ -22,15 +22,20 @@ class CustomUserSerializer(serializers.ModelSerializer):
         extra_kwargs = {'password': {'write_only': True}}
 
     def create(self, validated_data):
+        # Rozdzielenie logiki biznesowej od tworzenia użytkownika
+        company_name = validated_data.get('company_name', '')
+        email = validated_data['email']
+        password = validated_data['password']
+
+        # Obsługa potencjalnych błędów w tworzeniu użytkownika
         try:
             user = CustomUser.objects.create_user(
-                email=validated_data['email'],
-                password=validated_data['password'],
-                company_name=validated_data.get('company_name', ''),
+                email=email,
+                password=password,
+                company_name=company_name,
             )
             return user
         except ValueError as e:
-            # Tutaj przechwytujemy błąd ValueError i zwracamy go jako ValidationError
             raise serializers.ValidationError({'detail': str(e)})
 
 

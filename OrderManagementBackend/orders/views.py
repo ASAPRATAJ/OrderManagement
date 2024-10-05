@@ -29,5 +29,7 @@ class UserOrderListView(generics.ListAPIView):
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
+        if self.request.user.is_staff is True:
+            return Order.objects.all().order_by('-created_at')
         return Order.objects.filter(user=self.request.user).order_by('-created_at')
 

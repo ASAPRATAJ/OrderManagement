@@ -34,7 +34,7 @@ class ProductDetailView(generics.RetrieveAPIView):
     serializer_class = ProductSerializer
 
 
-class ProductUpdateView(generics.RetrieveUpdateAPIView):
+class ProductUpdateView(generics.UpdateAPIView):
     """View for updating specified Product object in database."""
     queryset = Product.objects.all()
     serializer_class = ProductSerializer

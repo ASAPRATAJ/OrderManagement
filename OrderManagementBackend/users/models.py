@@ -24,6 +24,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError(_('Password must contain at least one special character'))
 
     def create_user(self, email, company_name, password=None, **extra_fields):
+        """View for creating users with validated email and password."""
         if not email:
             raise ValueError(_('The Email field must be set'))
         email = self.normalize_email(email)
