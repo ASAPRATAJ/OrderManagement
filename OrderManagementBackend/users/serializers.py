@@ -1,14 +1,15 @@
 from rest_framework import serializers
-from .models import CustomUser
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 
+from .models import CustomUser
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer): # noqa
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
 
-        # Add custom claims
+        # Custom claims
         token['is_staff'] = user.is_staff
         token['is_superuser'] = user.is_superuser
 

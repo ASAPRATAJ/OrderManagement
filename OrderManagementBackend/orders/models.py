@@ -4,6 +4,7 @@ from products.models import Product
 
 
 class Order(models.Model):
+    """Fields of Order Model in database."""
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     products = models.ManyToManyField(Product, through='OrderProduct')
     created_at = models.DateTimeField(auto_now_add=True)
@@ -14,6 +15,7 @@ class Order(models.Model):
 
 
 class OrderProduct(models.Model):
+    """Through model to handle product's quantity in Order Model."""
     order = models.ForeignKey(Order, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()

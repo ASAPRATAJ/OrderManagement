@@ -4,6 +4,7 @@ from products.models import Product
 
 
 class Cart(models.Model):
+    """Fields of Cart Model in database."""
     user = models.ForeignKey(CustomUser, on_delete=models.CASCADE)
     created_at = models.DateTimeField(auto_now_add=True)
 

@@ -1,4 +1,5 @@
 from rest_framework import serializers
+
 from .models import Product, ProductTag
 
 
@@ -10,6 +11,7 @@ class ProductTagSerializer(serializers.ModelSerializer):
 
 
 class ProductSerializer(serializers.ModelSerializer):
+    """Serializer for Product object."""
     tags = serializers.PrimaryKeyRelatedField(queryset=ProductTag.objects.all(), many=True)
     # it adds tag field from ProductTag model while serialize Product
 

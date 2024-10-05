@@ -1,9 +1,11 @@
+import datetime
+
 from rest_framework import serializers
 
 from orders.models import Order, OrderProduct
 from .models import Cart, CartItems
 from products.serializers import ProductSerializer
-import datetime
+
 
 
 class CartItemsSerializer(serializers.ModelSerializer):

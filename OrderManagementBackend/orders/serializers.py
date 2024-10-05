@@ -1,30 +1,30 @@
-import datetime
 from rest_framework import serializers
+
 from .models import Order, OrderProduct
 from products.models import Product
 
 
 class OrderProductSerializer(serializers.ModelSerializer):
-    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product')  # product_id do zapisu, powiązane z modelem Product
+    product_id = serializers.PrimaryKeyRelatedField(queryset=Product.objects.all(), source='product')
 
     class Meta:
         model = OrderProduct
-        fields = ['product_id', 'quantity']  # product_id do zapisu, product do odczytu
+        fields = ['product_id', 'quantity']
 
 
 class OrderCreateSerializer(serializers.ModelSerializer):
     products = OrderProductSerializer(source='orderproduct_set', many=True)
-    delivery_date = serializers.DateField(required=True)  # Dodajemy pole delivery_date
+    delivery_date = serializers.DateField(required=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'products', 'created_at', 'delivery_date']  # Upewnij się, że delivery_date jest tutaj
+        fields = ['id', 'products', 'created_at', 'delivery_date']
         read_only_fields = ['created_at']
 
 
 class OrderProductListSerializer(serializers.ModelSerializer):
     product_id = serializers.PrimaryKeyRelatedField(source='product', read_only=True)
-    product_title = serializers.CharField(source='product.title', read_only=True)  # Pobieramy nazwę produktu
+    product_title = serializers.CharField(source='product.title', read_only=True)
 
     class Meta:
         model = OrderProduct
@@ -32,7 +32,7 @@ class OrderProductListSerializer(serializers.ModelSerializer):
 
 
 class OrderListSerializer(serializers.ModelSerializer):
-    products = OrderProductListSerializer(source='orderproduct_set', many=True)  # Używamy relacji do OrderProduct
+    products = OrderProductListSerializer(source='orderproduct_set', many=True)
 
     class Meta:
         model = Order
