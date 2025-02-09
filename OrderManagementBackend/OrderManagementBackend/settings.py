@@ -88,7 +88,7 @@ WSGI_APPLICATION = "OrderManagementBackend.wsgi.application"
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.postgresql",
-        "NAME": "ordermanagemenet_testdb",
+        "NAME": "ordermanagement_test_db",
         "USER": "ordermanagement_user",
         "PASSWORD": "testpass123",
         "HOST": "localhost",
@@ -139,7 +139,7 @@ STATIC_URL = "static/"
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:3000",
+    "http://localhost:5173",
 ]
 
 CORS_ALLOW_METHODS = [

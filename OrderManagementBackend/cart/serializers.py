@@ -28,24 +28,24 @@ class CartSerializer(serializers.ModelSerializer):
 class CreateOrderFromCartSerializer(serializers.Serializer):
     delivery_date = serializers.DateField(required=True)  # Pole do pobierania daty dostawy
 
-    def validate_delivery_date(self, value): # noqa
+    def validate_delivery_date(self, value):
         # Pobieramy aktualną datę i godzinę
         today = datetime.date.today()
         current_time = datetime.datetime.now().time()
-
-        # Sprawdzenie czy jest przed czy po godzinie 12:00
         noon = datetime.time(12, 0, 0)
 
-        # Jeśli zamówienie jest złożone po godzinie 12:00
+        # Obliczamy najbliższy dostępny dzień dostawy
         if current_time > noon:
-            # Sprawdź, czy wybrano datę na pojutrze lub później
-            if value <= today + datetime.timedelta(days=1):
-                raise serializers.ValidationError("If order is placed after 12:00 PM, "
-                                                  "the earliest delivery date is the day after tomorrow.")
-        else:
-            # Jeśli zamówienie złożone przed 12:00, sprawdzamy, czy data jest co najmniej jutrzejsza
-            if value <= today:
-                raise serializers.ValidationError("Delivery date must be at least tomorrow's date.")
+            today += datetime.timedelta(days=1) # Jeśli po 12:00, zamówienie przesuwa się o dzień
+
+        # Szukamy pierwszego dostępnego dnia (wtorek-piątek)
+        while today.weekday() not in [1, 2, 3, 4]:  # 1=Wtorek, 2=Środa, 3=Czwartek, 4=Piątek
+            today += datetime.timedelta(days=1)
+
+        # Sprawdzamy, czy wybrana data spełnia warunki
+        if value < today:
+            raise serializers.ValidationError(f"Delivery date must be selected between Tuesday and Friday.")
+
         return value
 
     def create(self, validated_data):
