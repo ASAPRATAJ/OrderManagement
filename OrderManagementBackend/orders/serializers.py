@@ -33,7 +33,8 @@ class OrderProductListSerializer(serializers.ModelSerializer):
 
 class OrderListSerializer(serializers.ModelSerializer):
     products = OrderProductListSerializer(source='orderproduct_set', many=True)
+    company_name = serializers.CharField(source='user.company_name', read_only=True)
 
     class Meta:
         model = Order
-        fields = ['id', 'created_at', 'user', 'delivery_date', 'products']
+        fields = ['id', 'created_at', 'user', 'delivery_date', 'products', 'company_name']

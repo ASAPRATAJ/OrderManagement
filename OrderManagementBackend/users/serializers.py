@@ -4,6 +4,12 @@ from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
 from .models import CustomUser
 
 
+class EditCustomUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = CustomUser
+        fields = ('id', 'email', 'company_name', 'password', 'nip', 'phone_number',
+                  'invoice_name', 'company_address')
+
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer): # noqa
     @classmethod
     def get_token(cls, user):

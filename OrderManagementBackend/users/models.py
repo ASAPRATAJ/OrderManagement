@@ -54,6 +54,11 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     is_staff = models.BooleanField(default=False)
     is_active = models.BooleanField(default=True)
     date_joined = models.DateTimeField(default=timezone.now)
+    nip = models.CharField(max_length=10, blank=True, null=True)  # NIP
+    phone_number = models.CharField(max_length=15, blank=True, null=True)  # Numer telefonu
+    company_address = models.TextField(blank=True, null=True)  # Adres siedziby firmy
+    invoice_name = models.CharField(max_length=255, blank=True, null=True)  # Pełna nazwa firmy do faktury
+
 
     objects = CustomUserManager()
 
