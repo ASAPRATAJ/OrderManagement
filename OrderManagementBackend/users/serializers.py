@@ -1,5 +1,7 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+from django.core.exceptions import ValidationError
 
 from .models import CustomUser
 
@@ -28,21 +30,34 @@ class CustomUserSerializer(serializers.ModelSerializer):
         fields = ('id', 'email', 'company_name', 'password', 'is_staff', 'is_superuser')
         extra_kwargs = {'password': {'write_only': True}}
 
+    def validate_password(self, value):
+        """
+        Walidacja hasła przy użyciu globalnych walidatorów Django.
+        """
+        try:
+            validate_password(value)  # Wywołanie globalnych walidatorów haseł
+        except ValidationError as e:
+            raise serializers.ValidationError(e.messages)  # Przekazanie błędów do DRF
+        return value
+
     def create(self, validated_data):
-        # Rozdzielenie logiki biznesowej od tworzenia użytkownika
+        """
+        Tworzenie użytkownika z walidacją danych.
+        """
         company_name = validated_data.get('company_name', '')
         email = validated_data['email']
         password = validated_data['password']
 
-        # Obsługa potencjalnych błędów w tworzeniu użytkownika
         try:
+            # Użycie metody create_user z modelu CustomUser
             user = CustomUser.objects.create_user(
                 email=email,
                 password=password,
                 company_name=company_name,
             )
             return user
-        except ValueError as e:
+        except Exception as e:
+            # Obsługa błędów podczas tworzenia użytkownika
             raise serializers.ValidationError({'detail': str(e)})
 
 
