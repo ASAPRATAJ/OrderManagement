@@ -14,17 +14,23 @@ class ProductCreateView(generics.CreateAPIView):
 
 class ProductListView(generics.ListAPIView):
     """View for listing existing Product objects in database."""
-    queryset = Product.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        """Changed list method with filtering Product object if Tag object exists in database."""
+        """List products with optional filtering by tag."""
+        # Jeśli użytkownik jest administratorem, zwróć wszystkie produkty
+        if self.request.user.is_staff:  # Użyj is_staff zamiast is_admin()
+            return Product.objects.all()
 
-        queryset = Product.objects.all()
+        # Domyślnie zwróć tylko aktywne produkty
+        queryset = Product.objects.filter(is_active=True)
+
+        # Opcjonalne filtrowanie po tagu
         tag = self.request.query_params.get('tag', None)
         if tag:
-            queryset = queryset.filter(tags__name=tag)  # Filtrujemy produkty po tagu
+            queryset = queryset.filter(tags__name=tag)
+
         return queryset
 
 
