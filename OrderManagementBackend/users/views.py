@@ -16,11 +16,13 @@ class UserProfileView(generics.RetrieveUpdateAPIView):
     def get_object(self):
         return self.request.user  # Zwróć aktualnie zalogowanego użytkownika
 
+
 class UserEditView(generics.UpdateAPIView):
     """View for editing user profile in database."""
     queryset = CustomUser.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = EditCustomUserSerializer
+
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     """View for creating JWT token, to be able to authorize user."""
