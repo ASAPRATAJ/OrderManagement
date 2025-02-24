@@ -12,6 +12,11 @@ class CartItemsSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()
     product = ProductSerializer(read_only=True)
 
+    def validate_quantity(self, value):
+        if value <= 0:
+            raise serializers.ValidationError("Ilość produktu musi być większa niż 0.")
+        return value
+
     class Meta:
         model = CartItems
         fields = ['id', 'product', 'product_id', 'quantity']
