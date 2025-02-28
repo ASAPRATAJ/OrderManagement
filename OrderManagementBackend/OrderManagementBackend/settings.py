@@ -42,7 +42,7 @@ else:
 ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ordermanagement-production-0b45.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS = ['https://ordermanagement-production-0b45.up.railway.app',
-                        'https://polishlodypartner.vercel.app/']
+                        'https://polishlodypartner.vercel.app']
 
 
 # Application definition
@@ -164,7 +164,7 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
-    "https://polishlodypartner.vercel.app/",
+    "https://polishlodypartner.vercel.app",
 ]
 
 CORS_ALLOW_METHODS = [
@@ -177,8 +177,15 @@ CORS_ALLOW_METHODS = [
 ]
 
 CORS_ALLOW_HEADERS = [
-    "Authorization",
-    "Content-Type",
+    "accept",
+    "accept-encoding",
+    "authorization",
+    "content-type",
+    "dnt",
+    "origin",
+    "user-agent",
+    "x-csrftoken",
+    "x-requested-with",
 ]
 
 
