@@ -12,7 +12,9 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 from pathlib import Path
 from datetime import timedelta
 
+import dj_database_url
 from environ import Env
+
 env = Env()
 Env.read_env()
 ENVIRONMENT = env('ENVIRONMENT', default='production')
@@ -36,7 +38,9 @@ else:
     DEBUG = False
 
 
-ALLOWED_HOSTS = ['*']
+ALLOWED_HOSTS = [ 'localhost', '127.0.0.1', 'ordermanagement-production-0b45.up.railway.app' ]
+
+CSRF_TRUSTED_ORIGINS = 'https://ordermanagement-production-0b45.up.railway.app'
 
 
 # Application definition
@@ -108,7 +112,9 @@ DATABASES = {
     }
 }
 
-
+POSTGRES_LOCALLY = False
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY is True:
+    DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 # Password validation
 # https://docs.djangoproject.com/en/4.2/ref/settings/#auth-password-validators
 
@@ -152,6 +158,7 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:5173",
@@ -199,5 +206,6 @@ SIMPLE_JWT = {
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+
 
 ACCOUNT_USERNAME_BLACKLIST = [ 'admin', 'konto', 'profil', 'smak', 'polishlody', 'boss']
