@@ -9,6 +9,7 @@ https://docs.djangoproject.com/en/4.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.2/ref/settings/
 """
+import os
 from pathlib import Path
 from datetime import timedelta
 
@@ -38,7 +39,7 @@ else:
     DEBUG = False
 
 
-ALLOWED_HOSTS = [ 'localhost', '127.0.0.1', 'ordermanagement-production-0b45.up.railway.app' ]
+ALLOWED_HOSTS = ['localhost', '127.0.0.1', 'ordermanagement-production-0b45.up.railway.app']
 
 CSRF_TRUSTED_ORIGINS = 'https://ordermanagement-production-0b45.up.railway.app'
 
@@ -207,5 +208,7 @@ SIMPLE_JWT = {
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
+STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 
 ACCOUNT_USERNAME_BLACKLIST = [ 'admin', 'konto', 'profil', 'smak', 'polishlody', 'boss']
