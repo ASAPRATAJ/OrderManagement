@@ -55,6 +55,9 @@ INSTALLED_APPS = [
     "django.contrib.messages",
     "django.contrib.staticfiles",
 
+    'cloudinary_storage',
+    'cloudinary',
+
     "products",
     "users",
     "orders",
@@ -117,6 +120,7 @@ DATABASES = {
 }
 
 POSTGRES_LOCALLY = False
+
 if ENVIRONMENT == 'production' or POSTGRES_LOCALLY is True:
     DATABASES['default'] = dj_database_url.parse(env('DATABASE_URL'))
 # Password validation
@@ -217,7 +221,19 @@ SIMPLE_JWT = {
 }
 
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / 'media'
+
+
+if ENVIRONMENT == 'production' or POSTGRES_LOCALLY is True:
+    DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
+else:
+    MEDIA_ROOT = BASE_DIR / 'media'
+
+
+CLOUDINARY_STORAGE = {
+    'CLOUD_NAME': env('CLOUD_NAME'),
+    'API_KEY': env('CLOUD_API_KEY'),
+    'API_SECRET': env('CLOUD_API_SECRET'),
+}
 
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'media')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
