@@ -11,6 +11,11 @@ from products.serializers import ProductSerializer
 class CartItemsSerializer(serializers.ModelSerializer):
     product_id = serializers.IntegerField()
     product = ProductSerializer(read_only=True)
+    product_name = serializers.SlugRelatedField(
+        source='product',
+        read_only=True,
+        slug_field='title'
+    )
 
     def validate_quantity(self, value):
         if value <= 0:
@@ -19,7 +24,7 @@ class CartItemsSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = CartItems
-        fields = ['id', 'product', 'product_id', 'quantity']
+        fields = ['id', 'product', 'product_id', 'quantity', 'product_name']
 
 
 class CartSerializer(serializers.ModelSerializer):
