@@ -1,13 +1,26 @@
+"""
+URL configuration for the 'users' app.
+Handles user registration, authentication, and profile management.
+"""
+
 from django.urls import path
 from rest_framework_simplejwt.views import TokenRefreshView
-from .views import UserCreateView, UserListView, CustomTokenObtainPairView, UserEditView, UserProfileView
-
+from .views import (
+    UserCreateView,
+    UserListView,
+    CustomTokenObtainPairView,
+    UserProfileView,
+)
 
 urlpatterns = [
-    path('users/create/', UserCreateView.as_view(), name='user-create'),
-    path('users/', UserListView.as_view(), name='user-list'),
-    path('users/token/create/', CustomTokenObtainPairView.as_view(), name='token-create'),
-    path('users/token/refresh/', TokenRefreshView.as_view(), name='token-refresh'),
-    path('users/profile/', UserProfileView.as_view(), name='user-profile'),
-    path('users/profile/edit/', UserEditView.as_view(), name='user-edit'),
+    # User management
+    path("", UserListView.as_view(), name="user-list"),  # GET: List users
+    path("register/", UserCreateView.as_view(), name="user-register"),  # POST: Create user
+
+    # Authentication
+    path("login/", CustomTokenObtainPairView.as_view(), name="token-obtain"),  # POST: Get JWT
+    path("token/refresh/", TokenRefreshView.as_view(), name="token-refresh"),  # POST: Refresh JWT
+
+    # Profile management
+    path("profile/", UserProfileView.as_view(), name="user-profile"),  # GET/PUT/PATCH: View profile
 ]

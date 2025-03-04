@@ -1,67 +1,78 @@
+"""
+Serializers for the 'users' app.
+Handles data serialization for user registration, authentication, profile management, and listing.
+"""
+
 from django.contrib.auth.password_validation import validate_password
+from django.core.exceptions import ValidationError
 from rest_framework import serializers
 from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
-from django.core.exceptions import ValidationError
 
 from .models import CustomUser
 
 
 class EditCustomUserSerializer(serializers.ModelSerializer):
+    """Serializer for retrieving and updating user profile data."""
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'company_name', 'password', 'nip', 'phone_number',
-                  'invoice_name', 'company_address')
+        fields = (
+            "id",
+            "email",
+            "company_name",
+            "nip",
+            "phone_number",
+            "invoice_name",
+            "company_address",
+        )
 
-class CustomTokenObtainPairSerializer(TokenObtainPairSerializer): # noqa
+
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    """Serializer for generating JWT tokens with custom claims using email as login."""
+    username_field = "email"  # Tell SimpleJWT to use email instead of username
+
+    def validate(self, attrs):
+        """Validate credentials and return token pair."""
+        data = super().validate(attrs)
+        refresh = self.get_token(self.user)
+        data["refresh"] = str(refresh)
+        data["access"] = str(refresh.access_token)
+        return data
+
     @classmethod
     def get_token(cls, user):
         token = super().get_token(user)
-
-        # Custom claims
-        token['is_staff'] = user.is_staff
-        token['is_superuser'] = user.is_superuser
-
+        token["is_staff"] = user.is_staff
+        token["is_superuser"] = user.is_superuser
+        token["email"] = user.email
         return token
 
 
 class CustomUserSerializer(serializers.ModelSerializer):
+    """Serializer for creating new users with password validation."""
     class Meta:
         model = CustomUser
-        fields = ('id', 'email', 'company_name', 'password', 'is_staff', 'is_superuser')
-        extra_kwargs = {'password': {'write_only': True}}
+        fields = ("id", "email", "company_name", "password", "is_staff", "is_superuser")
+        extra_kwargs = {"password": {"write_only": True}}
 
     def validate_password(self, value):
-        """
-        Walidacja hasła przy użyciu globalnych walidatorów Django.
-        """
+        """Validate password using Django's built-in validators."""
         try:
-            validate_password(value)  # Wywołanie globalnych walidatorów haseł
+            validate_password(value)
         except ValidationError as e:
-            raise serializers.ValidationError(e.messages)  # Przekazanie błędów do DRF
+            raise serializers.ValidationError(e.messages)
         return value
 
     def create(self, validated_data):
-        """
-        Tworzenie użytkownika z walidacją danych.
-        """
-        company_name = validated_data.get('company_name', '')
-        email = validated_data['email']
-        password = validated_data['password']
-
-        try:
-            # Użycie metody create_user z modelu CustomUser
-            user = CustomUser.objects.create_user(
-                email=email,
-                password=password,
-                company_name=company_name,
-            )
-            return user
-        except Exception as e:
-            # Obsługa błędów podczas tworzenia użytkownika
-            raise serializers.ValidationError({'detail': str(e)})
+        """Create a new user with validated data."""
+        return CustomUser.objects.create_user(
+            email=validated_data["email"],
+            password=validated_data["password"],
+            company_name=validated_data.get("company_name", ""),
+        )
 
 
 class ListCustomUserSerializer(serializers.ModelSerializer):
+    """Serializer for listing users (admin view)."""
     class Meta:
         model = CustomUser
-        fields = ('id', 'company_name', 'is_staff', 'is_superuser')
+        fields = ("id", "company_name", "is_staff", "is_superuser")
