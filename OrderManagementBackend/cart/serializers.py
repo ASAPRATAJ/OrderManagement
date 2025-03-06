@@ -1,11 +1,8 @@
 import datetime
-
 from rest_framework import serializers
-
 from orders.models import Order, OrderProduct
 from .models import Cart, CartItems
 from products.serializers import ProductSerializer
-
 
 
 class CartItemsSerializer(serializers.ModelSerializer):
@@ -18,8 +15,8 @@ class CartItemsSerializer(serializers.ModelSerializer):
     )
 
     def validate_quantity(self, value):
-        if value <= 0:
-            raise serializers.ValidationError("Ilość produktu musi być większa niż 0.")
+        if value < 4:
+            raise serializers.ValidationError("Ilość produktu musi być większa niż 4.")
         return value
 
     class Meta:
@@ -44,17 +41,34 @@ class CreateOrderFromCartSerializer(serializers.Serializer):
         current_time = datetime.datetime.now().time()
         noon = datetime.time(12, 0, 0)
 
-        # Obliczamy najbliższy dostępny dzień dostawy
+        # Warunek 1: Jeśli zamówienie jest po 12:00, nie można wybrać tego samego dnia
         if current_time > noon:
-            today += datetime.timedelta(days=1) # Jeśli po 12:00, zamówienie przesuwa się o dzień
+            if value == today:
+                raise serializers.ValidationError("Nie można wybrać tego samego dnia, "
+                                                  "jeśli zamówienie jest składane po godzinie 12:00.")
 
-        # Szukamy pierwszego dostępnego dnia (wtorek-piątek)
-        while today.weekday() not in [1, 2, 3, 4]:  # 1=Wtorek, 2=Środa, 3=Czwartek, 4=Piątek
-            today += datetime.timedelta(days=1)
+        # Warunek 2: Jeśli zamówienie jest po 12:00, nie można wybrać następnego dnia
+        if current_time > noon:
+            next_day = today + datetime.timedelta(days=1)
+            if value == next_day:
+                raise serializers.ValidationError("Nie można wybrać następnego dnia, "
+                                                  "jeśli zamówienie jest składane po godzinie 12:00.")
 
-        # Sprawdzamy, czy wybrana data spełnia warunki
+        # Warunek 3: Jeśli zamówienie jest w czwartek po 12:00, piątek, sobota lub niedziela, najwcześniejszy dzień dostawy to wtorek
+        if (today.weekday() == 3 and current_time > noon) or today.weekday() in [4, 5, 6]:  # 3=Czwartek, 4=Piątek, 5=Sobota, 6=Niedziela
+            earliest_delivery = today
+            while earliest_delivery.weekday() != 1:  # 1=Wtorek
+                earliest_delivery += datetime.timedelta(days=1)
+            if value < earliest_delivery:
+                raise serializers.ValidationError(f"Składając zamówienie dzisiaj, najwcześniejszy dzień dostawy to {earliest_delivery.strftime('%Y-%m-%d')} (wtorek).")
+
+        # Warunek 4: Użytkownik może wybrać termin odbioru tylko na wtorek/środę/czwartek/piątek
+        if value.weekday() not in [1, 2, 3, 4]:  # 1=Wtorek, 2=Środa, 3=Czwartek, 4=Piątek
+            raise serializers.ValidationError("Termin odbioru można wybrać tylko na wtorek, środę, czwartek lub piątek.")
+
+        # Sprawdzenie, czy data dostawy nie jest w przeszłości
         if value < today:
-            raise serializers.ValidationError(f"Delivery date must be selected between Tuesday and Friday.")
+            raise serializers.ValidationError("Data dostawy nie może być w przeszłości.")
 
         return value
 

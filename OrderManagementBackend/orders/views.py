@@ -18,19 +18,19 @@ class OrderCreateView(generics.CreateAPIView):
         return context
 
 
-class OrderListView(generics.ListAPIView):
-    """View for listing orders from database."""
-    queryset = Order.objects.all()
-    serializer_class = OrderListSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
-
-    def get_queryset(self):
-        """Overridden method for listing to show latest orders on the top."""
-        return Order.objects.all().order_by('-created_at')
+# class OrderListView(generics.ListAPIView):
+#     """View for listing orders from database."""
+#     queryset = Order.objects.all()
+#     serializer_class = OrderListSerializer
+#     permission_classes = [IsAuthenticated, IsAdminUser]
+#
+#     def get_queryset(self):
+#         """Overridden method for listing to show latest orders on the top."""
+#         return Order.objects.all().order_by('-created_at')
 
 
 class UserOrderListView(generics.ListAPIView):
-    """View for list all users from database."""
+    """View for list all user's orders from database, admin can see all order."""
     serializer_class = OrderListSerializer
     permission_classes = [IsAuthenticated]
 
