@@ -1,3 +1,8 @@
+"""
+Views for the 'products' app.
+Handles CRUD operations for products and tags with role-based access control.
+"""
+
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticated, IsAdminUser
 
@@ -5,65 +10,63 @@ from .models import Product, ProductTag
 from .serializers import ProductSerializer, ProductTagSerializer
 
 
-class ProductCreateView(generics.CreateAPIView):
-    """View for creating new Product object in database."""
-    queryset = Product.objects.all()
-    permission_classes = [IsAuthenticated, IsAdminUser]
-    serializer_class = ProductSerializer
-
-
 class ProductListView(generics.ListAPIView):
-    """View for listing existing Product objects in database."""
+    """List products with optional tag filtering (accessible to all authenticated users)."""
     permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
     def get_queryset(self):
-        """List products with optional filtering by tag."""
-        # Jeśli użytkownik jest administratorem, zwróć wszystkie produkty
-        if self.request.user.is_staff:  # Użyj is_staff zamiast is_admin()
-            return Product.objects.all()
+        """Return queryset based on user role and query parameters."""
+        if self.request.user.is_staff:
+            queryset = Product.objects.all()  # Admins see all products
+        else:
+            queryset = Product.objects.filter(is_active=True)  # Regular users see only active products
 
-        # Domyślnie zwróć tylko aktywne produkty
-        queryset = Product.objects.filter(is_active=True)
-
-        # Opcjonalne filtrowanie po tagu
-        tag = self.request.query_params.get('tag', None)
+        # Filter by tag if provided
+        tag = self.request.query_params.get("tag")
         if tag:
             queryset = queryset.filter(tags__name=tag)
 
         return queryset
 
 
+class ProductCreateView(generics.CreateAPIView):
+    """Create a new product (admin only)."""
+    queryset = Product.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = ProductSerializer
+
+
 class ProductDetailView(generics.RetrieveAPIView):
-    """View for listing details of Product object from database."""
+    """Retrieve details of a specific product (accessible to all authenticated users)."""
     queryset = Product.objects.all()
     permission_classes = [IsAuthenticated]
     serializer_class = ProductSerializer
 
 
 class ProductUpdateView(generics.UpdateAPIView):
-    """View for updating specified Product object in database."""
+    """Update an existing product (admin only)."""
     queryset = Product.objects.all()
-    serializer_class = ProductSerializer
     permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = ProductSerializer
 
 
 class ProductDestroyView(generics.DestroyAPIView):
-    """View for deleting product object from database."""
+    """Delete a product (admin only)."""
     queryset = Product.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
     serializer_class = ProductSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
-
-
-class ProductTagCreateView(generics.CreateAPIView):
-    """View for creating Tag object in database."""
-    queryset = ProductTag.objects.all()
-    serializer_class = ProductTagSerializer
-    permission_classes = [IsAuthenticated, IsAdminUser]
 
 
 class ProductTagListView(generics.ListAPIView):
-    """View for listing Tag objects from database."""
+    """List all product tags (accessible to all authenticated users)."""
     queryset = ProductTag.objects.all()
-    serializer_class = ProductTagSerializer
     permission_classes = [IsAuthenticated]
+    serializer_class = ProductTagSerializer
+
+
+class ProductTagCreateView(generics.CreateAPIView):
+    """Create a new product tag (admin only)."""
+    queryset = ProductTag.objects.all()
+    permission_classes = [IsAuthenticated, IsAdminUser]
+    serializer_class = ProductTagSerializer

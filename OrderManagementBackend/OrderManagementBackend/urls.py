@@ -17,7 +17,7 @@ from drf_spectacular.views import (
 # API routes for project applications
 api_patterns = [
     path("users/", include("users.urls")),
-    # path("products/", include("products.urls")),
+    path("products/", include("products.urls")),
     # path("orders/", include("orders.urls")),
     # path("cart/", include("cart.urls")),
 ]
@@ -36,7 +36,6 @@ urlpatterns = [
     path("boss/", admin.site.urls),  # Custom admin path
     # API routes
     path("api/", include(api_patterns)),
-    path("api/", include("products.urls")),
     path("api/", include("orders.urls")),
     path("api/", include("cart.urls")),
     # Documentation routes
