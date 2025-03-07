@@ -9,6 +9,8 @@ from django.core.validators import RegexValidator
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 
+from .validators import CustomPasswordValidator
+
 
 class CustomUserManager(BaseUserManager):
     """Manager for the CustomUser model with email-based authentication."""
@@ -84,3 +86,9 @@ class CustomUser(AbstractBaseUser, PermissionsMixin):
     def __str__(self):
         """Return string representation of the user."""
         return self.company_name
+
+    def set_password(self, password):
+        validator = CustomPasswordValidator()
+        validator.validate(password)
+        super().set_password(password)
+
